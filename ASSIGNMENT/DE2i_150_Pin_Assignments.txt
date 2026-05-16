@@ -1,0 +1,152 @@
+# DE2i-150 Pin Assignments
+# File: DE2i_150_Pin_Assignments.txt
+# Mo ta: Danh sach cac chan vao/ra tren board DE2i-150
+
+# --- CLOCKS ---
+CLOCK_50      PIN_AJ16    # 50 MHz clock input (3.3V)
+CLOCK2_50     PIN_A15     # 50 MHz clock input (3.3V)
+CLOCK3_50     PIN_V15     # 50 MHz clock input (2.5V)
+SMA_CLKOUT    PIN_AF25    # External (SMA) clock output (3.3V)
+SMA_CLKIN     PIN_AK16    # External (SMA) clock input (3.3V)
+
+# --- PUSH-BUTTONS (active-low) ---
+KEY[0]        PIN_AA26    # Push-button[0] (2.5V)
+KEY[1]        PIN_AE25    # Push-button[1] (2.5V)
+KEY[2]        PIN_AF30    # Push-button[2] (2.5V)
+KEY[3]        PIN_AE26    # Push-button[3] (2.5V)
+
+# --- SLIDE SWITCHES ---
+SW[0]         PIN_V28     # Slide Switch[0] (2.5V)
+SW[1]         PIN_U30     # Slide Switch[1] (2.5V)
+SW[2]         PIN_V21     # Slide Switch[2] (2.5V)
+SW[3]         PIN_C2      # Slide Switch[3] (2.5V)
+SW[4]         PIN_AB30    # Slide Switch[4] (2.5V)
+SW[5]         PIN_U21     # Slide Switch[5] (2.5V)
+SW[6]         PIN_T28     # Slide Switch[6] (2.5V)
+SW[7]         PIN_R30     # Slide Switch[7] (2.5V)
+SW[8]         PIN_P30     # Slide Switch[8] (2.5V)
+SW[9]         PIN_R29     # Slide Switch[9] (2.5V)
+SW[10]        PIN_R26     # Slide Switch[10] (2.5V)
+SW[11]        PIN_N26     # Slide Switch[11] (2.5V)
+SW[12]        PIN_M26     # Slide Switch[12] (2.5V)
+SW[13]        PIN_N25     # Slide Switch[13] (2.5V)
+SW[14]        PIN_J26     # Slide Switch[14] (2.5V)
+SW[15]        PIN_K25     # Slide Switch[15] (2.5V)
+SW[16]        PIN_C30     # Slide Switch[16] (2.5V)
+SW[17]        PIN_H25     # Slide Switch[17] (2.5V)
+
+# --- LEDS ---
+LEDR[0]       PIN_T23     # LED Red[0] (2.5V)
+LEDR[1]       PIN_T24     # LED Red[1] (2.5V)
+LEDR[2]       PIN_V27     # LED Red[2] (2.5V)
+LEDR[3]       PIN_W25     # LED Red[3] (2.5V)
+LEDR[4]       PIN_T21     # LED Red[4] (2.5V)
+LEDR[5]       PIN_T26     # LED Red[5] (2.5V)
+LEDR[6]       PIN_R25     # LED Red[6] (2.5V)
+LEDR[7]       PIN_T27     # LED Red[7] (2.5V)
+LEDR[8]       PIN_P25     # LED Red[8] (2.5V)
+LEDR[9]       PIN_R24     # LED Red[9] (2.5V)
+LEDR[10]      PIN_P21     # LED Red[10] (2.5V)
+LEDR[11]      PIN_N24     # LED Red[11] (2.5V)
+LEDR[12]      PIN_N21     # LED Red[12] (2.5V)
+LEDR[13]      PIN_M25     # LED Red[13] (2.5V)
+LEDR[14]      PIN_K24     # LED Red[14] (2.5V)
+LEDR[15]      PIN_L25     # LED Red[15] (2.5V)
+LEDR[16]      PIN_M21     # LED Red[16] (2.5V)
+LEDR[17]      PIN_M22     # LED Red[17] (2.5V)
+
+LEDG[0]       PIN_AA25    # LED Green[0] (2.5V)
+LEDG[1]       PIN_AB25    # LED Green[1] (2.5V)
+LEDG[2]       PIN_F27     # LED Green[2] (2.5V)
+LEDG[3]       PIN_F26     # LED Green[3] (2.5V)
+LEDG[4]       PIN_W26     # LED Green[4] (2.5V)
+LEDG[5]       PIN_Y22     # LED Green[5] (2.5V)
+LEDG[6]       PIN_Y25     # LED Green[6] (2.5V)
+LEDG[7]       PIN_AA22    # LED Green[7] (2.5V)
+LEDG[8]       PIN_J25     # LED Green[8] (2.5V)
+
+# --- 7-SEGMENT DISPLAYS ---
+HEX0[0]       PIN_E15; HEX0[1] PIN_E12; HEX0[2] PIN_G11; HEX0[3] PIN_F11; HEX0[4] PIN_F16; HEX0[5] PIN_D16; HEX0[6] PIN_F14
+HEX1[0]       PIN_G14; HEX1[1] PIN_B13; HEX1[2] PIN_G13; HEX1[3] PIN_F12; HEX1[4] PIN_G12; HEX1[5] PIN_J9;  HEX1[6] PIN_G10
+HEX2[0]       PIN_G8;  HEX2[1] PIN_G7;  HEX2[2] PIN_F7;  HEX2[3] AG30;    HEX2[4] PIN_F6;  HEX2[5] PIN_F4;  HEX2[6] PIN_F10
+HEX3[0]       PIN_D10; HEX3[1] PIN_D7;  HEX3[2] PIN_E6;  HEX3[3] PIN_E4;  HEX3[4] PIN_E3;  HEX3[5] PIN_D5;  HEX3[6] PIN_D4
+HEX4[0]       PIN_A14; HEX4[1] PIN_A13; HEX4[2] PIN_C7;  HEX4[3] PIN_C6;  HEX4[4] PIN_C5;  HEX4[5] PIN_C4;  HEX4[6] PIN_C3
+HEX5[0]       PIN_D3;  HEX5[1] PIN_A10; HEX5[2] PIN_A9;  HEX5[3] PIN_A7;  HEX5[4] PIN_A6;  HEX5[5] PIN_A11; HEX5[6] PIN_B6
+HEX6[0]       PIN_B9;  HEX6[1] PIN_B10; HEX6[2] PIN_C8;  HEX6[3] PIN_C9;  HEX6[4] PIN_D8;  HEX6[5] PIN_D9;  HEX6[6] PIN_E9
+HEX7[0]       PIN_E10; HEX7[1] PIN_F8;  HEX7[2] PIN_F9;  HEX7[3] PIN_C10; HEX7[4] PIN_C11; HEX7[5] PIN_C12; HEX7[6] PIN_D12
+
+# --- VGA ---
+VGA_R[0]      PIN_A17; VGA_R[1] PIN_C18; VGA_R[2] PIN_B18; VGA_R[3] PIN_A18; VGA_R[4] PIN_E18; VGA_R[5] PIN_E19; VGA_R[6] PIN_B19; VGA_R[7] PIN_C19
+VGA_G[0]      PIN_D20; VGA_G[1] PIN_C20; VGA_G[2] PIN_A20; VGA_G[3] PIN_K19; VGA_G[4] PIN_A21; VGA_G[5] PIN_F21; VGA_G[6] PIN_A22; VGA_G[7] PIN_B22
+VGA_B[0]      PIN_E24; VGA_B[1] PIN_C24; VGA_B[2] PIN_B25; VGA_B[3] PIN_C23; VGA_B[4] PIN_F24; VGA_B[5] PIN_A23; VGA_B[6] PIN_G25; VGA_B[7] PIN_C22
+VGA_CLK       PIN_D27     # VGA Clock (3.3V)
+VGA_BLANK_N   PIN_F25     # VGA BLANK (3.3V)
+VGA_HS        PIN_B24     # VGA H_SYNC (3.3V)
+VGA_VS        PIN_A24     # VGA V_SYNC (3.3V)
+VGA_SYNC_N    PIN_AH20    # VGA SYNC (3.3V)
+
+# --- ETHERNET (ENET) ---
+ENET_GTX_CLK  PIN_A12     # GMII Transmit Clock (2.5V)
+ENET_INT_N    PIN_E16     # Interrupt (2.5V)
+ENET_LINK100  PIN_F5      # Link 100 Status (2.5V)
+ENET_MDC      PIN_C16     # Management data clock (2.5V)
+ENET_MDIO     PIN_C15     # Management data (2.5V)
+ENET_RST_N    PIN_C14     # Hardware reset (2.5V)
+ENET_RX_CLK   PIN_L15     # GMII/MII Receive clock (2.5V)
+ENET_RX_COL   PIN_G15     # GMII/MII Collision (2.5V)
+ENET_RX_CRS   PIN_D6      # GMII/MII Carrier sense (2.5V)
+ENET_RX_DATA[0] PIN_F15; ENET_RX_DATA[1] PIN_E13; ENET_RX_DATA[2] PIN_A5; ENET_RX_DATA[3] PIN_B7
+ENET_RX_DV    PIN_A8      # GMII/MII Receive data valid (2.5V)
+ENET_RX_ER    PIN_D11     # GMII/MII Receive error (2.5V)
+ENET_TX_CLK   PIN_F13     # MII Transmit clock (2.5V)
+ENET_TX_DATA[0] PIN_B12; ENET_TX_DATA[1] PIN_E7; ENET_TX_DATA[2] PIN_C13; ENET_TX_DATA[3] PIN_D15
+ENET_TX_EN    PIN_D14     # GMII/MII Transmit enable (2.5V)
+ENET_TX_ER    PIN_D13     # GMII/MII Transmit error (2.5V)
+
+# --- LCD 16x2 ---
+LCD_DATA[0]   PIN_AG4; LCD_DATA[1] PIN_AF3; LCD_DATA[2] PIN_AH3; LCD_DATA[3] PIN_AE5
+LCD_DATA[4]   PIN_AH2; LCD_DATA[5] PIN_AE3; LCD_DATA[6] PIN_AH4; LCD_DATA[7] PIN_AE4
+LCD_EN        PIN_AF4; LCD_RW PIN_AJ3; LCD_RS PIN_AG3; LCD_ON PIN_AF27
+
+# --- UART ---
+UART_RXD      PIN_B27; UART_TXD PIN_H24; UART_CTS PIN_D26; UART_RTS PIN_A29
+
+# --- SD CARD ---
+SD_CLK        PIN_AH25; SD_CMD PIN_AF18; SD_WP_N PIN_AJ27
+SD_DAT[0]     PIN_AH27; SD_DAT[1] PIN_AJ28; SD_DAT[2] PIN_AD24; SD_DAT[3] PIN_AE18
+
+# --- SDRAM (128MB) ---
+DRAM_ADDR[0]  PIN_AG7;  DRAM_ADDR[1]  PIN_AJ7;  DRAM_ADDR[2]  PIN_AG8;  DRAM_ADDR[3]  PIN_AH8
+DRAM_ADDR[4]  PIN_AF16; DRAM_ADDR[5]  PIN_AF15; DRAM_ADDR[6]  PIN_AE14; DRAM_ADDR[7]  PIN_AE15
+DRAM_ADDR[8]  PIN_AC12; DRAM_ADDR[9]  PIN_AE12; DRAM_ADDR[10] PIN_AH10; DRAM_ADDR[11] PIN_AE11; DRAM_ADDR[12] PIN_AE10
+DRAM_DQ[0]    PIN_AD10; DRAM_DQ[1]    PIN_AD5;  DRAM_DQ[2]    PIN_AE9;  DRAM_DQ[3]    PIN_AE8
+DRAM_DQ[4]    PIN_AE7;  DRAM_DQ[5]    PIN_AF7;  DRAM_DQ[6]    PIN_AF6;  DRAM_DQ[7]    PIN_AF9
+DRAM_DQ[8]    PIN_AB13; DRAM_DQ[9]    PIN_AF13; DRAM_DQ[10]   PIN_AF12; DRAM_DQ[11]   PIN_AG9
+DRAM_DQ[12]   PIN_AA13; DRAM_DQ[13]   PIN_AB11; DRAM_DQ[14]   PIN_AA12; DRAM_DQ[15]   PIN_AB14
+DRAM_DQ[16]   PIN_AH11; DRAM_DQ[17]   PIN_AG11; DRAM_DQ[18]   PIN_AH12; DRAM_DQ[19]   PIN_AF11
+DRAM_DQ[20]   PIN_AG12; DRAM_DQ[21]   PIN_AH13; DRAM_DQ[22]   PIN_AG13; DRAM_DQ[23]   AJ14
+DRAM_DQ[24]   PIN_AH9;  DRAM_DQ[25]   PIN_AK8;  DRAM_DQ[26]   PIN_AG10; DRAM_DQ[27]   PIN_AK7
+DRAM_DQ[28]   PIN_AH7;  DRAM_DQ[29]   PIN_AK12; DRAM_DQ[30]   PIN_AJ12; DRAM_DQ[31]   PIN_AH15
+DRAM_BA[0]    PIN_AF10; DRAM_BA[1]    PIN_AG12
+DRAM_DQM[0]   PIN_AD10; DRAM_DQM[1]   PIN_AE9;  DRAM_DQM[2]   PIN_AH10; DRAM_DQM[3]   PIN_AE11
+DRAM_RAS_N    PIN_AH3;  DRAM_CAS_N    PIN_AH4;  DRAM_WE_N     PIN_AF8
+DRAM_CKE      PIN_AD6;  DRAM_CLK      PIN_AE6;  DRAM_CS_N     PIN_AG5
+
+# --- FLASH (8MB) ---
+FS_ADDR[1]    PIN_AB22; FS_ADDR[2]    PIN_AH19; FS_ADDR[3]    PIN_AK19; FS_ADDR[4]    PIN_AJ18
+FS_ADDR[5]    PIN_AA18; FS_ADDR[6]    PIN_AH18; FS_ADDR[7]    PIN_AK17; FS_ADDR[8]    PIN_Y20
+FS_ADDR[9]    PIN_AK21; FS_ADDR[10]   PIN_AH21; FS_ADDR[11]   PIN_AG21; FS_ADDR[12]   PIN_AG22
+FS_ADDR[13]   PIN_AD22; FS_ADDR[14]   PIN_AE24; FS_ADDR[15]   PIN_AD23; FS_ADDR[16]   PIN_AB21
+FS_ADDR[17]   PIN_AH17; FS_ADDR[18]   PIN_AE17; FS_ADDR[19]   PIN_AG20; FS_ADDR[20]   PIN_AK20
+FS_ADDR[21]   PIN_AE19; FS_ADDR[22]   PIN_AA16; FS_ADDR[23]   PIN_AF15; FS_ADDR[24]   PIN_AG15
+FS_ADDR[25]   PIN_Y17;  FS_ADDR[26]   PIN_AB16
+FS_DQ[0]      PIN_AK23; FS_DQ[1]      PIN_AE23; FS_DQ[2]      PIN_AH24; FS_DQ[3]      PIN_AH23
+FS_DQ[4]      PIN_AA21; FS_DQ[5]      PIN_AE20; FS_DQ[6]      PIN_Y19;  FS_DQ[7]      PIN_AA17
+FS_DQ[8]      PIN_AB17; FS_DQ[9]      PIN_Y18;  FS_DQ[10]     PIN_AA20; FS_DQ[11]     PIN_AE21
+FS_DQ[12]     PIN_AH22; FS_DQ[13]     PIN_AJ24; FS_DQ[14]     PIN_AE22; FS_DQ[15]     PIN_AK28
+FS_DQ[16]     PIN_AK9;  FS_DQ[17]     PIN_AJ10; FS_DQ[18]     PIN_AK11; FS_DQ[19]     PIN_AK12
+FS_DQ[20]     PIN_AJ13; FS_DQ[21]     PIN_AK15; FS_DQ[22]     PIN_AC16; FS_DQ[23]     PIN_AH16
+FS_DQ[24]     PIN_AG16; FS_DQ[25]     PIN_AD16; FS_DQ[26]     PIN_AJ15; FS_DQ[27]     PIN_AK14
+FS_DQ[28]     PIN_AK13; FS_DQ[29]     PIN_AJ12; FS_DQ[30]     PIN_AK10; FS_DQ[31]     PIN_AJ9
+FL_CE_N       PIN_AG19; FL_OE_N       PIN_AJ19; FL_RST_N      PIN_AG18; FL_RY        PIN_AF19
+FL_WE_N       PIN_AG17; FL_WP_N       PIN_AK18

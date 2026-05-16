@@ -1,0 +1,228 @@
+# Quartus Project Settings File
+# File: eth_vga_top.qsf
+# Mo ta: Cau hinh project Quartus cho pipeline Ethernet-BRAM-VGA
+# Board: DE2i-150 (EP4CE115F29C7)
+# Ngay: 16/05/2026
+
+# =====================================================================
+# DEVICE
+# =====================================================================
+set_global_assignment -name FAMILY "Cyclone IV GX"
+set_global_assignment -name DEVICE EP4CGX150DF31C7
+set_global_assignment -name TOP_LEVEL_ENTITY top_eth_vga
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.0
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
+
+# =====================================================================
+# SOURCE FILES
+# =====================================================================
+
+# Top level
+set_global_assignment -name VERILOG_FILE SOURCE_P/top_eth_vga.v
+
+# CLOCK
+set_global_assignment -name VERILOG_FILE CLOCK/pll_25mhz.v
+
+# ETHERNET MAC (Alex Forencich - verilog-ethernet)
+set_global_assignment -name VERILOG_FILE ETHERNET/eth_mac_mii.v
+set_global_assignment -name VERILOG_FILE ETHERNET/mii_phy_if.v
+set_global_assignment -name VERILOG_FILE ETHERNET/eth_mac_1g.v
+set_global_assignment -name VERILOG_FILE ETHERNET/axis_gmii_rx.v
+set_global_assignment -name VERILOG_FILE ETHERNET/axis_gmii_tx.v
+set_global_assignment -name VERILOG_FILE ETHERNET/lfsr.v
+set_global_assignment -name VERILOG_FILE ETHERNET/ssio_sdr_in.v
+set_global_assignment -name VERILOG_FILE ETHERNET/ssio_sdr_out.v
+
+# UDP PIXEL RECEIVER (custom)
+set_global_assignment -name VERILOG_FILE UDP/eth_pixel_rx.v
+
+# SDRAM / FRAMEBUFFER
+set_global_assignment -name VERILOG_FILE SDRAM/framebuffer_bram.v
+
+# VGA
+set_global_assignment -name VERILOG_FILE VGA/vga_output.v
+
+# TIMING CONSTRAINTS
+set_global_assignment -name SDC_FILE eth_vga_top.sdc
+
+# =====================================================================
+# PIN ASSIGNMENTS - CLOCK
+# =====================================================================
+set_location_assignment PIN_AJ16 -to CLOCK_50
+
+# =====================================================================
+# PIN ASSIGNMENTS - PUSH BUTTONS (active-low)
+# =====================================================================
+set_location_assignment PIN_AA26 -to KEY[0]
+set_location_assignment PIN_AE25 -to KEY[1]
+set_location_assignment PIN_AF30 -to KEY[2]
+set_location_assignment PIN_AE26 -to KEY[3]
+
+# =====================================================================
+# PIN ASSIGNMENTS - LEDs
+# =====================================================================
+set_location_assignment PIN_T23  -to LEDR[0]
+set_location_assignment PIN_T24  -to LEDR[1]
+set_location_assignment PIN_V27  -to LEDR[2]
+set_location_assignment PIN_W25  -to LEDR[3]
+set_location_assignment PIN_T21  -to LEDR[4]
+set_location_assignment PIN_T26  -to LEDR[5]
+set_location_assignment PIN_R25  -to LEDR[6]
+set_location_assignment PIN_T27  -to LEDR[7]
+set_location_assignment PIN_P25  -to LEDR[8]
+set_location_assignment PIN_R24  -to LEDR[9]
+set_location_assignment PIN_P21  -to LEDR[10]
+set_location_assignment PIN_N24  -to LEDR[11]
+set_location_assignment PIN_N21  -to LEDR[12]
+set_location_assignment PIN_M25  -to LEDR[13]
+set_location_assignment PIN_K24  -to LEDR[14]
+set_location_assignment PIN_L25  -to LEDR[15]
+set_location_assignment PIN_M21  -to LEDR[16]
+set_location_assignment PIN_M22  -to LEDR[17]
+
+set_location_assignment PIN_AA25 -to LEDG[0]
+set_location_assignment PIN_AB25 -to LEDG[1]
+set_location_assignment PIN_F27  -to LEDG[2]
+set_location_assignment PIN_F26  -to LEDG[3]
+set_location_assignment PIN_W26  -to LEDG[4]
+set_location_assignment PIN_Y22  -to LEDG[5]
+set_location_assignment PIN_Y25  -to LEDG[6]
+set_location_assignment PIN_AA22 -to LEDG[7]
+set_location_assignment PIN_J25  -to LEDG[8]
+
+# =====================================================================
+# PIN ASSIGNMENTS - ETHERNET (MII mode, ENET0)
+# =====================================================================
+set_location_assignment PIN_A12  -to ENET_GTX_CLK
+set_location_assignment PIN_L15  -to ENET_RX_CLK
+set_location_assignment PIN_F13  -to ENET_TX_CLK
+set_location_assignment PIN_F15  -to ENET_RX_DATA[0]
+set_location_assignment PIN_E13  -to ENET_RX_DATA[1]
+set_location_assignment PIN_A5   -to ENET_RX_DATA[2]
+set_location_assignment PIN_B7   -to ENET_RX_DATA[3]
+set_location_assignment PIN_A8   -to ENET_RX_DV
+set_location_assignment PIN_D11  -to ENET_RX_ER
+set_location_assignment PIN_B12  -to ENET_TX_DATA[0]
+set_location_assignment PIN_E7   -to ENET_TX_DATA[1]
+set_location_assignment PIN_C13  -to ENET_TX_DATA[2]
+set_location_assignment PIN_D15  -to ENET_TX_DATA[3]
+set_location_assignment PIN_D14  -to ENET_TX_EN
+set_location_assignment PIN_D13  -to ENET_TX_ER
+set_location_assignment PIN_C14  -to ENET_RST_N
+set_location_assignment PIN_C16  -to ENET_MDC
+set_location_assignment PIN_C15  -to ENET_MDIO
+
+# =====================================================================
+# PIN ASSIGNMENTS - VGA (ADV7123 DAC)
+# =====================================================================
+set_location_assignment PIN_A17  -to VGA_R[0]
+set_location_assignment PIN_C18  -to VGA_R[1]
+set_location_assignment PIN_B18  -to VGA_R[2]
+set_location_assignment PIN_A18  -to VGA_R[3]
+set_location_assignment PIN_E18  -to VGA_R[4]
+set_location_assignment PIN_E19  -to VGA_R[5]
+set_location_assignment PIN_B19  -to VGA_R[6]
+set_location_assignment PIN_C19  -to VGA_R[7]
+
+set_location_assignment PIN_D20  -to VGA_G[0]
+set_location_assignment PIN_C20  -to VGA_G[1]
+set_location_assignment PIN_A20  -to VGA_G[2]
+set_location_assignment PIN_K19  -to VGA_G[3]
+set_location_assignment PIN_A21  -to VGA_G[4]
+set_location_assignment PIN_F21  -to VGA_G[5]
+set_location_assignment PIN_A22  -to VGA_G[6]
+set_location_assignment PIN_B22  -to VGA_G[7]
+
+set_location_assignment PIN_E24  -to VGA_B[0]
+set_location_assignment PIN_C24  -to VGA_B[1]
+set_location_assignment PIN_B25  -to VGA_B[2]
+set_location_assignment PIN_C23  -to VGA_B[3]
+set_location_assignment PIN_F24  -to VGA_B[4]
+set_location_assignment PIN_A23  -to VGA_B[5]
+set_location_assignment PIN_G25  -to VGA_B[6]
+set_location_assignment PIN_C22  -to VGA_B[7]
+
+set_location_assignment PIN_D27  -to VGA_CLK
+set_location_assignment PIN_F25  -to VGA_BLANK_N
+set_location_assignment PIN_B24  -to VGA_HS
+set_location_assignment PIN_A24  -to VGA_VS
+set_location_assignment PIN_AH20 -to VGA_SYNC_N
+
+# =====================================================================
+# I/O STANDARDS
+# =====================================================================
+# Ethernet (2.5V)
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_CLK
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_CLK
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_DATA[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_DATA[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_DATA[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_DATA[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_DV
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RX_ER
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_DATA[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_DATA[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_DATA[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_DATA[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_EN
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_TX_ER
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_RST_N
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_GTX_CLK
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_MDC
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ENET_MDIO
+
+# VGA (3.3V)
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_R[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_G[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_CLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_BLANK_N
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_HS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_VS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_SYNC_N
+
+# Clock (3.3V)
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+
+# =====================================================================
+# COMPILER OPTIONS
+# =====================================================================
+set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
+set_global_assignment -name ENABLE_SIGNALTAP OFF
+set_global_assignment -name USE_SIGNALTAP_FILE output/stp.stp
+
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name SOURCE_FILE eth_vga_top.qsf
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 896
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 7
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top

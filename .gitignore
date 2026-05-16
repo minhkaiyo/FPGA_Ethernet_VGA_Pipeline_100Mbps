@@ -1,0 +1,49 @@
+# Quartus generated files
+output/
+db/
+incremental_db/
+*.qws
+*.v_bak
+*.sv_bak
+*.bak
+*.rpt
+*.smsg
+*.summary
+*.jdi
+*.pin
+*.done
+*.qdf
+*.sld
+*.sof
+*.pof
+*.cdf
+*.tcl
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+temp_*/
+
+# Confidential Hardware Design Files (Rule 4.1 in /ecc)
+*.kicad_pcb
+*.kicad_sch
+*.kicad_pro
+*.kicad_prl
+*.pdf
+
+# Heavy external tools in SOURCE_P
+SOURCE_P/amaranth-main/
+SOURCE_P/cocotb-master/
+SOURCE_P/fusesoc-main/
+SOURCE_P/sby-main/
+SOURCE_P/verilator-master/
+SOURCE_P/yosys-main/
+SOURCE_P/FPGA_RealTime_and_Static_Sobel_Edge_Detection-main/
+
