@@ -18,9 +18,9 @@ module oddr #
     assign q = d1; // Đơn giản hóa cho mô phỏng
 `else
 altddio_out #(
-    .WIDTH(WIDTH),
-    .POWER_UP_HIGH("OFF"),
-    .INTENDED_DEVICE_FAMILY("Cyclone IV GX")
+    .width(WIDTH),
+    .power_up_high("OFF"),
+    .intended_device_family("Cyclone IV GX")
 )
 altddio_out_inst (
     .aset(1'b0), .datain_h(d1), .datain_l(d2), .outclocken(1'b1), .outclock(clk),

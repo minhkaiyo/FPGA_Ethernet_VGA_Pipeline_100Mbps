@@ -1,0 +1,3 @@
+@echo off
+echo Dang khoi dong ModelSim...
+vsim -do run_sim.do
