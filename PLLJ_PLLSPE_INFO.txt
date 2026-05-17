@@ -1,0 +1,5 @@
+PLL_Name	pll_25mhz:pll_inst|altpll:altpll_inst|pll_25mhz_altpll1:auto_generated|pll1
+PLLJITTER	26
+PLLSPEmax	84
+PLLSPEmin	-53
+

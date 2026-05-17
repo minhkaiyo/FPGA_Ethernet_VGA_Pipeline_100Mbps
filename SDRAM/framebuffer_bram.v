@@ -21,11 +21,13 @@ module framebuffer_bram (
     (* ramstyle = "M9K" *) reg [7:0] mem [0:307199];
 
     // Khoi tao toan bo ve mau den
-    integer i;
-    initial begin
-        for (i = 0; i < 307200; i = i + 1)
-            mem[i] = 8'd0;
-    end
+    // integer i;
+    // initial begin
+    //     for (i = 0; i < 307200; i = i + 1)
+    //         mem[i] = 8'd0;
+    // end
+    // LUU Y: Quartus se mac dinh khoi tao M9K Block RAM bang 0 (tuong duong mau den).
+    // Viec dung vong lap > 5000 lan se bi Quartus bao loi (Error 10106).
 
     // Port A: Write
     always @(posedge wr_clk) begin

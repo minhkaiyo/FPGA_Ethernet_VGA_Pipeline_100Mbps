@@ -37,7 +37,19 @@ module top_eth_vga (
     output wire        VGA_HS,
     output wire        VGA_VS,
     output wire        VGA_BLANK_N,
-    output wire        VGA_SYNC_N
+    output wire        VGA_SYNC_N,
+    
+    // --- SDRAM (IS42S16320D, use 16-bit) ---
+    output wire [12:0] DRAM_ADDR,
+    output wire [1:0]  DRAM_BA,
+    output wire        DRAM_CAS_N,
+    output wire        DRAM_CKE,
+    output wire        DRAM_CLK,
+    output wire        DRAM_CS_N,
+    inout  wire [31:0] DRAM_DQ,
+    output wire [3:0]  DRAM_DQM,
+    output wire        DRAM_RAS_N,
+    output wire        DRAM_WE_N
 );
 
     // ==========================================================
@@ -56,6 +68,9 @@ module top_eth_vga (
     // Reset synchronizer
     wire sys_rst_n = KEY[0] & pll_locked;
     wire sys_rst   = ~sys_rst_n;
+
+    // SDRAM not used — clock tied off in BRAM buffer section
+
 
     // ==========================================================
     // PHY MANAGEMENT
@@ -141,6 +156,7 @@ module top_eth_vga (
     wire [18:0] fb_wr_addr;
     wire [7:0]  fb_wr_data;
     wire [15:0] rx_frame_cnt;
+    wire        eth_frame_done;
 
     eth_pixel_rx #(
         .UDP_PORT     (16'd1234),
@@ -159,46 +175,68 @@ module top_eth_vga (
         .fb_wr_addr     (fb_wr_addr),
         .fb_wr_data     (fb_wr_data),
 
-        .rx_frame_cnt   (rx_frame_cnt)
+        .rx_frame_cnt   (rx_frame_cnt),
+        .eth_frame_done (eth_frame_done)
     );
 
     // ==========================================================
-    // FRAMEBUFFER (Dual-Port BRAM)
+    // BRAM PING-PONG FRAME BUFFER
     // ==========================================================
     wire [18:0] fb_rd_addr;
     wire [7:0]  fb_rd_data;
+    wire        vga_vsync_raw;
 
-    framebuffer_bram fb_inst (
-        // Port A: Write (Ethernet RX clock)
-        .wr_clk     (eth_rx_clk),
-        .wr_en      (fb_wr_en),
-        .wr_addr    (fb_wr_addr),
-        .wr_data    (fb_wr_data),
+    framebuffer_pingpong #(
+        .FRAME_PIXELS(307200)
+    ) bram_buf_inst (
+        // Write port (Ethernet domain)
+        .wr_clk         (eth_rx_clk),
+        .wr_en          (fb_wr_en),
+        .wr_addr        (fb_wr_addr),
+        .wr_data        (fb_wr_data),
+        .eth_frame_done (eth_frame_done),
 
-        // Port B: Read (VGA pixel clock)
-        .rd_clk     (clk_25),
-        .rd_addr    (fb_rd_addr),
-        .rd_data    (fb_rd_data)
+        // Read port (VGA domain)
+        .rd_clk         (clk_25),
+        .rd_addr        (fb_rd_addr),
+        .rd_data        (fb_rd_data),
+
+        // Bank debug
+        .wr_bank        (LEDG[2]),
+        .rd_bank        (LEDG[3])
     );
+
+    // Tie off unused SDRAM pins (keep board safe)
+    assign DRAM_ADDR   = 13'd0;
+    assign DRAM_BA     = 2'd0;
+    assign DRAM_CAS_N  = 1'b1;
+    assign DRAM_CKE    = 1'b0;
+    assign DRAM_CLK    = 1'b0;
+    assign DRAM_CS_N   = 1'b1;
+    assign DRAM_DQ     = 32'bz;
+    assign DRAM_DQM    = 4'b1111;
+    assign DRAM_RAS_N  = 1'b1;
+    assign DRAM_WE_N   = 1'b1;
 
     // ==========================================================
     // VGA OUTPUT
     // ==========================================================
     vga_output vga_inst (
-        .clk         (clk_25),
-        .rst_n       (sys_rst_n),
+        .clk          (clk_25),
+        .rst_n        (sys_rst_n),
 
-        .fb_rd_addr  (fb_rd_addr),
-        .fb_rd_data  (fb_rd_data),
+        .fb_rd_addr   (fb_rd_addr),
+        .fb_rd_data   (fb_rd_data),
+        .vga_vsync_raw(vga_vsync_raw),
 
-        .vga_r       (VGA_R),
-        .vga_g       (VGA_G),
-        .vga_b       (VGA_B),
-        .vga_hs      (VGA_HS),
-        .vga_vs      (VGA_VS),
-        .vga_blank_n (VGA_BLANK_N),
-        .vga_sync_n  (VGA_SYNC_N),
-        .vga_clk     (VGA_CLK)
+        .vga_r        (VGA_R),
+        .vga_g        (VGA_G),
+        .vga_b        (VGA_B),
+        .vga_hs       (VGA_HS),
+        .vga_vs       (VGA_VS),
+        .vga_blank_n  (VGA_BLANK_N),
+        .vga_sync_n   (VGA_SYNC_N),
+        .vga_clk      (VGA_CLK)
     );
 
     // ==========================================================
@@ -218,6 +256,8 @@ module top_eth_vga (
     // LEDG
     assign LEDG[0] = sys_rst_n;         // Reset da xong
     assign LEDG[1] = rx_axis_tvalid;    // Dang nhan du lieu
-    assign LEDG[8:2] = 7'd0;
+    // LEDG[2] = wr_bank (assigned by bram_buf_inst)
+    // LEDG[3] = rd_bank (assigned by bram_buf_inst)
+    assign LEDG[8:4] = 5'd0;
 
 endmodule

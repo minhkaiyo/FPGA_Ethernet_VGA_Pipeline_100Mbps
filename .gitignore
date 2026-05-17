@@ -47,3 +47,17 @@ SOURCE_P/verilator-master/
 SOURCE_P/yosys-main/
 SOURCE_P/FPGA_RealTime_and_Static_Sobel_Edge_Detection-main/
 
+# ModelSim Simulation files
+work/
+transcript
+ETHERNET/transcript
+*.wlf
+*.vstf
+
+# Staging/Backup folders
+complete1/
+complete2/
+SIM/
+sim_output.png
+
+

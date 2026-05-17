@@ -1,7 +1,12 @@
 # Timing Constraints
 # File: eth_vga_top.sdc
-# Mo ta: SDC cho pipeline Ethernet 100Mbps -> VGA tren DE2i-150
-# Ngay: 16/05/2026
+# Mo ta: SDC cho pipeline 1Gbps RGMII -> BRAM -> VGA tren DE2i-150
+# Quartus 13 SP1 — Cyclone IV GX
+# Ngay: 17/05/2026
+#
+# LUU Y: Quartus 13 dung 'derive_pll_clocks' thay vi 'create_generated_clock'
+# vi hierarchy cua altpll thay doi theo version. derive_pll_clocks tu dong
+# tim tat ca PLL output va tao clock tuong ung.
 
 # =====================================================================
 # CLOCK DEFINITIONS
@@ -10,62 +15,69 @@
 # Board oscillator 50 MHz
 create_clock -name CLOCK_50 -period 20.0 [get_ports CLOCK_50]
 
-# PLL output: 25 MHz (VGA pixel clock)
-create_generated_clock \
-    -name clk_25 \
-    -source [get_pins {pll_inst|altpll_inst|inclk[0]}] \
-    -divide_by 2 \
-    [get_pins {pll_inst|altpll_inst|clk[0]}]
+# RGMII RX Clock: 125 MHz tu PHY (recovered clock)
+create_clock -name rgmii_rx_clk -period 8.0 [get_ports ENET_RX_CLK]
 
-# MII RX Clock: cung cap boi PHY, 25 MHz o 100Mbps
-create_clock -name mii_rx_clk -period 40.0 [get_ports ENET_RX_CLK]
-
-# MII TX Clock: cung cap boi PHY, 25 MHz o 100Mbps
-create_clock -name mii_tx_clk -period 40.0 [get_ports ENET_TX_CLK]
+# Tao tu dong PLL output clocks (clk_25, clk_125, clk_125_90)
+# Day la cach dung chuan cho Quartus 13 + altpll
+derive_pll_clocks
 
 # =====================================================================
-# CLOCK GROUPS (CDC isolation)
+# CLOCK UNCERTAINTY
 # =====================================================================
-# Ba mien clock doc lap: Ethernet RX, VGA (clk_25), System (CLOCK_50)
-# Cac ket noi xuyen mien clock da duoc xu ly boi BRAM voi async port
+derive_clock_uncertainty
+
+# =====================================================================
+# CLOCK GROUPS (CDC isolation — cut timing analysis qua ranh gioi domain)
+# =====================================================================
 set_clock_groups -asynchronous \
-    -group { mii_rx_clk } \
-    -group { mii_tx_clk } \
-    -group { clk_25 } \
-    -group { CLOCK_50 }
+    -group { CLOCK_50 } \
+    -group { rgmii_rx_clk } \
+    -group { pll_inst|altpll_inst|auto_generated|pll1|clk[0] } \
+    -group { pll_inst|altpll_inst|auto_generated|pll1|clk[1] \
+             pll_inst|altpll_inst|auto_generated|pll1|clk[2] }
 
 # =====================================================================
-# MII INPUT TIMING (PHY -> FPGA)
+# RGMII INPUT TIMING (PHY -> FPGA via DDR)
+# RGMII spec: data centered on clock edge with +-1.2ns skew
 # =====================================================================
-# Theo chuẩn MII IEEE 802.3, data ổn định 10ns trước rising edge của RX_CLK
-# Chấp nhận setup 5ns, hold 5ns so với mii_rx_clk
-
-set_input_delay -clock mii_rx_clk -max 10.0 [get_ports {ENET_RX_DATA[*] ENET_RX_DV ENET_RX_ER}]
-set_input_delay -clock mii_rx_clk -min  2.0  [get_ports {ENET_RX_DATA[*] ENET_RX_DV ENET_RX_ER}]
-
-# =====================================================================
-# MII OUTPUT TIMING (FPGA -> PHY)
-# =====================================================================
-# TX data phai on dinh truoc rising edge cua TX_CLK it nhat 5ns
-set_output_delay -clock mii_tx_clk -max 15.0 [get_ports {ENET_TX_DATA[*] ENET_TX_EN ENET_TX_ER}]
-set_output_delay -clock mii_tx_clk -min  2.0  [get_ports {ENET_TX_DATA[*] ENET_TX_EN ENET_TX_ER}]
+set_input_delay -clock rgmii_rx_clk -max  1.2 [get_ports {ENET_RX_DATA[*] ENET_RX_DV}]
+set_input_delay -clock rgmii_rx_clk -min -1.2 [get_ports {ENET_RX_DATA[*] ENET_RX_DV}]
+set_input_delay -clock rgmii_rx_clk -max  1.2 -clock_fall [get_ports {ENET_RX_DATA[*] ENET_RX_DV}] -add_delay
+set_input_delay -clock rgmii_rx_clk -min -1.2 -clock_fall [get_ports {ENET_RX_DATA[*] ENET_RX_DV}] -add_delay
 
 # =====================================================================
-# VGA OUTPUT TIMING
+# RGMII OUTPUT TIMING (FPGA -> PHY via DDR, relative to GTX_CLK)
 # =====================================================================
-# VGA output du la combinational tu clk_25, relax timing
-set_output_delay -clock clk_25 -max 2.0 [get_ports {VGA_R[*] VGA_G[*] VGA_B[*]}]
-set_output_delay -clock clk_25 -max 2.0 [get_ports {VGA_HS VGA_VS VGA_BLANK_N VGA_SYNC_N VGA_CLK}]
+set_output_delay -clock { pll_inst|altpll_inst|auto_generated|pll1|clk[2] } \
+    -max  1.0 [get_ports {ENET_TX_DATA[*] ENET_TX_EN ENET_GTX_CLK}]
+set_output_delay -clock { pll_inst|altpll_inst|auto_generated|pll1|clk[2] } \
+    -min -1.0 [get_ports {ENET_TX_DATA[*] ENET_TX_EN ENET_GTX_CLK}]
 
 # =====================================================================
-# FALSE PATHS
+# VGA OUTPUT TIMING (relaxed — 25MHz pixel clock)
 # =====================================================================
-# Reset va cac tin hieu cham khong can phan tich timing
+set_output_delay -clock { pll_inst|altpll_inst|auto_generated|pll1|clk[0] } \
+    -max 2.0 [get_ports {VGA_R[*] VGA_G[*] VGA_B[*]}]
+set_output_delay -clock { pll_inst|altpll_inst|auto_generated|pll1|clk[0] } \
+    -max 2.0 [get_ports {VGA_HS VGA_VS VGA_BLANK_N VGA_SYNC_N VGA_CLK}]
+
+# =====================================================================
+# FALSE PATHS — Relaxed paths khong can timing analysis
+# =====================================================================
+# Button inputs: async, ignore
 set_false_path -from [get_ports {KEY[*]}]
 
-# MDIO / MDC cham, khong quan trong timing
-set_false_path -to   [get_ports ENET_MDC]
-set_false_path -to   [get_ports ENET_RST_N]
+# MDIO / RST: slow signals, ignore timing
+set_false_path -to [get_ports ENET_MDC]
+set_false_path -to [get_ports ENET_RST_N]
+set_false_path -to [get_ports ENET_MDIO]
 
-# Debug LEDs
-set_false_path -to   [get_ports {LEDR[*] LEDG[*]}]
+# LEDs: output only, no timing requirement
+set_false_path -to [get_ports {LEDR[*] LEDG[*]}]
+
+# SDRAM: tied off, ignore all
+set_false_path -to [get_ports {DRAM_ADDR[*] DRAM_BA[*] DRAM_CAS_N DRAM_CKE \
+    DRAM_CLK DRAM_CS_N DRAM_DQM[*] DRAM_RAS_N DRAM_WE_N}]
+set_false_path -from [get_ports {DRAM_DQ[*]}]
+set_false_path -to   [get_ports {DRAM_DQ[*]}]

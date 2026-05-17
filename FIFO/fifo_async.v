@@ -137,16 +137,20 @@ module fifo_async
     wire [PTR_WIDTH:0] rdiff;
     wire [PTR_WIDTH:0] rq2_wptr_bin;
     assign rq2_wptr_bin[PTR_WIDTH] = rq2_wptr[PTR_WIDTH];
-    for(genvar i=PTR_WIDTH-1; i>=0; i=i-1) begin
-        xor(rq2_wptr_bin[i], rq2_wptr[i], rq2_wptr_bin[i+1]);
-    end
+    
+    generate
+        genvar r_i;
+        for(r_i=PTR_WIDTH-1; r_i>=0; r_i=r_i-1) begin : rd_bin_conv
+            assign rq2_wptr_bin[r_i] = rq2_wptr[r_i] ^ rq2_wptr_bin[r_i+1];
+        end
+    endgenerate
 
     assign rdiff = (rbinnext <= rq2_wptr_bin) ? (rq2_wptr_bin - rbinnext) :
-                                    ((1<<(PTR_WIDTH+1)) - rbinnext + rq2_wptr_bin); 
+                                    ( {1'b1, {(PTR_WIDTH+1){1'b0}}} - rbinnext + rq2_wptr_bin); 
 
     always@(posedge i_rclk or negedge i_rrstn) begin
         if(!i_rrstn) o_rfill <= 0;
-        else         o_rfill <= rdiff;
+        else         o_rfill <= rdiff[PTR_WIDTH-1:0];
     end
 
     // ALMOST EMPTY FLAG
@@ -205,16 +209,20 @@ module fifo_async
     wire [PTR_WIDTH:0] wdiff;
     wire [PTR_WIDTH:0] wq2_rptr_bin;
     assign wq2_rptr_bin[PTR_WIDTH] = wq2_rptr[PTR_WIDTH];
-    for(genvar i=PTR_WIDTH-1; i>=0; i=i-1) begin
-        xor(wq2_rptr_bin[i], wq2_rptr[i], wq2_rptr_bin[i+1]);
-    end
+    
+    generate
+        genvar w_i;
+        for(w_i=PTR_WIDTH-1; w_i>=0; w_i=w_i-1) begin : wr_bin_conv
+            assign wq2_rptr_bin[w_i] = wq2_rptr[w_i] ^ wq2_rptr_bin[w_i+1];
+        end
+    endgenerate
 
     assign wdiff = (wq2_rptr_bin <= wbinnext) ? (wbinnext - wq2_rptr_bin) :
-                                    ((1<<(PTR_WIDTH+1)) - wq2_rptr_bin + wbinnext); 
+                                    ( {1'b1, {(PTR_WIDTH+1){1'b0}}} - wq2_rptr_bin + wbinnext); 
 
     always@(posedge i_wclk or negedge i_wrstn) begin
         if(!i_wrstn) o_wfill <= 0;
-        else         o_wfill <= wdiff;
+        else         o_wfill <= wdiff[PTR_WIDTH-1:0];
     end
 
     // ALMOST FULL FLAG

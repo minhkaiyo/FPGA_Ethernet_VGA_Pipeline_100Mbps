@@ -1,5 +1,5 @@
 // File: vga_output.v
-// Mo ta: Doc pixel tu framebuffer BRAM, xuat tin hieu VGA 640x480@60Hz
+// Mo ta: Doc pixel tu framebuffer BRAM Ping-Pong, xuat tin hieu VGA 640x480@60Hz
 //        Mono8: R = G = B = pixel_value (anh xam)
 // Ngay: 16/05/2026
 
@@ -7,9 +7,12 @@ module vga_output (
     input  wire        clk,        // 25 MHz pixel clock
     input  wire        rst_n,      // active-low reset
 
-    // Framebuffer read port
-    output wire [18:0] fb_rd_addr,
-    input  wire [7:0]  fb_rd_data,
+    // Framebuffer BRAM read port (1-cycle latency)
+    output wire [18:0] fb_rd_addr, // linear address = v*640 + h
+    input  wire [7:0]  fb_rd_data, // pixel data (1 cycle delayed)
+
+    // VSYNC raw output (active-low) - kept for compatibility
+    output wire        vga_vsync_raw,
 
     // VGA DAC signals (ADV7123 tren DE2i-150)
     output wire [7:0]  vga_r,
@@ -70,21 +73,25 @@ module vga_output (
     wire hsync = ~((h_cnt >= H_ACTIVE + H_FP) && (h_cnt < H_ACTIVE + H_FP + H_SYNC));
     wire vsync = ~((v_cnt >= V_ACTIVE + V_FP) && (v_cnt < V_ACTIVE + V_FP + V_SYNC));
 
-    // BRAM read address: row * 640 + col
-    // 640 = 512 + 128, nen row*640 = (row << 9) + (row << 7)
-    wire [18:0] row_base = {v_cnt[8:0], 9'd0} + {v_cnt[8:0], 7'd0, 2'd0};
-    // Luu y: v_cnt max = 479, can 9 bit. h_cnt max = 639, can 10 bit
-    // row_base = v_cnt * 512 + v_cnt * 128 = v_cnt * 640
-    // Nhung phai tinh dung bit width:
-    // v_cnt[8:0] << 9 = {v_cnt[8:0], 9'b0} = 18 bits
-    // v_cnt[8:0] << 7 = {v_cnt[8:0], 7'b0} = 16 bits
-    // Tong co the len 19 bits
+    // VSYNC raw (for bank-switch, unused now since BRAM doesn't need it)
+    assign vga_vsync_raw = vsync;
 
-    // Tinh lai cho chinh xac:
-    wire [18:0] addr_row = ({1'b0, v_cnt[8:0], 9'd0}) + ({3'd0, v_cnt[8:0], 7'd0});
-    assign fb_rd_addr = active ? (addr_row + {9'd0, h_cnt}) : 19'd0;
+    // Linear pixel address = v * 640 + h
+    // Pre-calculate 1 clock ahead to compensate for BRAM 1-cycle read latency
+    wire [9:0] h_next = (h_cnt == H_TOTAL-1) ? 10'd0 : h_cnt + 1'b1;
+    wire [9:0] v_next = (h_cnt == H_TOTAL-1) ?
+                            ((v_cnt == V_TOTAL-1) ? 10'd0 : v_cnt + 1'b1)
+                            : v_cnt;
 
-    // Pipeline delay 1 clk (BRAM co 1 cycle read latency)
+    wire h_active_next = (h_next < H_ACTIVE);
+    wire v_active_next = (v_next < V_ACTIVE);
+    wire active_next   = h_active_next & v_active_next;
+
+    // Look-ahead address: v_next*640 + h_next  (max = 479*640+639 = 306879 < 2^19)
+    wire [19:0] pixel_addr_next = (v_next * 10'd640) + {10'd0, h_next};
+    assign fb_rd_addr = active_next ? pixel_addr_next[18:0] : 19'd0;
+
+    // Pipeline delay 1 clk (BRAM has 1-cycle read latency)
     reg active_d1;
     reg hsync_d1, vsync_d1;
     always @(posedge clk or negedge rst_n) begin

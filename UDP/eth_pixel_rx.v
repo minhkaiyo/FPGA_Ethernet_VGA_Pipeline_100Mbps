@@ -35,7 +35,10 @@ module eth_pixel_rx #(
     output reg  [7:0]  fb_wr_data,
 
     // Debug / status
-    output reg  [15:0] rx_frame_cnt   // dem so frame nhan duoc
+    output reg  [15:0] rx_frame_cnt,  // dem so frame nhan duoc
+    
+    // SDRAM Ping-Pong Control
+    output reg         eth_frame_done // Pulse khi nhan xong 1 frame
 );
 
     // Byte counter trong frame hien tai
@@ -70,8 +73,10 @@ module eth_pixel_rx #(
             pixel_offset <= 0;
             fb_wr_en     <= 0;
             rx_frame_cnt <= 0;
+            eth_frame_done <= 0;
         end else begin
             fb_wr_en <= 1'b0; // mac dinh khong ghi
+            eth_frame_done <= 1'b0;
 
             if (s_axis_tvalid) begin
                 byte_cnt <= byte_cnt + 1'b1;
@@ -118,8 +123,12 @@ module eth_pixel_rx #(
 
                 // --- End of frame ---
                 if (s_axis_tlast) begin
-                    if (frame_valid && port_match && !s_axis_tuser)
+                    if (frame_valid && port_match && !s_axis_tuser) begin
                         rx_frame_cnt <= rx_frame_cnt + 1'b1;
+                        if (row_idx == FRAME_HEIGHT - 1) begin
+                            eth_frame_done <= 1'b1;
+                        end
+                    end
 
                     // Reset cho frame tiep theo
                     byte_cnt     <= 0;
