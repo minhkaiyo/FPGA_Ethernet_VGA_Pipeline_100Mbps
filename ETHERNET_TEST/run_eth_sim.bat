@@ -1,0 +1,3 @@
+@echo off
+echo Khoi dong ModelSim kiem tra Ethernet RGMII Loopback...
+vsim -do run_eth_sim.do
